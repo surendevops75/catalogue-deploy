@@ -35,21 +35,7 @@ pipeline {
                     }
                 }
             }
-        }
-        stage('Trigger DEV Deploy') {
-            steps {
-                script {
-                    build job: "../catalogue-deploy",
-                        wait: false, // Wait for completion
-                        propagate: false, // Propagate status
-                        parameters: [
-                            string(name: 'appVersion', value: "${appVersion}"),
-                            string(name: 'deploy_to', value: "dev")
-                        ]
-                }
-            }
-        }
-        
+        }    
     }
 
         
