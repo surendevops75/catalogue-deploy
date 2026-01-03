@@ -1,5 +1,5 @@
 deployment:
-  imageRepo: surendevops75/catalogue
-  imageVersion: v1
+  imageRepo: 231298815636.dkr.ecr.us-east-1.amazonaws.com/roboshop/catalogue
+  imageVersion: IMAGE_VERSION
 service:
   servicePort: 8080 # default value
