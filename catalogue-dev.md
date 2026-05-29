@@ -1,0 +1,386 @@
+# Argo CD Application Manifest Example
+
+This manifest demonstrates how to deploy applications into Kubernetes using Argo CD.
+
+The resource type used here is:
+
+kind: Application
+```
+
+An Argo CD Application connects:
+
+* A Git repository
+* Kubernetes cluster
+* Deployment configuration
+
+Argo CD continuously monitors the Git repository and automatically synchronizes Kubernetes resources with the desired state stored in Git.
+
+This approach follows the GitOps model where:
+
+Git Repository = Single Source of Truth
+```
+
+---
+
+---
+
+# Important Concepts
+
+# apiVersion
+
+apiVersion: argoproj.io/v1alpha1
+```
+
+Defines:
+
+* Kubernetes API group
+* Resource version
+
+`argoproj.io`
+belongs to:
+
+Argo CD Custom Resource Definitions (CRDs)
+```
+
+---
+
+# kind: Application
+
+kind: Application
+```
+
+This is the core resource in Argo CD.
+
+Represents:
+
+* One deployable application
+* One Git source
+* One deployment target
+
+---
+
+# metadata
+
+metadata:
+```
+
+Contains resource identification information.
+
+---
+
+## name
+
+name: catalogue
+```
+
+Application name visible inside Argo CD UI.
+
+---
+
+## namespace
+
+namespace: argocd
+```
+
+Application resource must be created in the same namespace where Argo CD is installed.
+
+---
+
+# project
+
+project: default
+```
+
+Argo CD Projects are used to:
+
+* Group applications
+* Apply RBAC
+* Restrict repositories
+* Restrict cluster access
+
+`default` project allows unrestricted deployments.
+
+---
+
+# source Section
+
+Defines where application manifests come from.
+
+---
+
+## repoURL
+
+repoURL:
+```
+
+Git repository containing Kubernetes manifests or Helm charts.
+
+Argo CD continuously monitors this repository.
+
+---
+
+## targetRevision
+
+targetRevision: main
+```
+
+Defines:
+
+* Git branch
+* Git tag
+* Git commit SHA
+
+Argo CD deploys resources from this revision.
+
+Examples:
+
+main
+develop
+v1.0.0
+```
+
+---
+
+## path
+
+path: .
+```
+
+Defines location of manifests inside repository.
+
+Example:
+
+k8s/
+helm/
+manifests/
+```
+
+`.` means repository root.
+
+---
+
+# Helm Configuration
+
+helm:
+```
+
+Indicates application uses Helm charts.
+
+---
+
+## releaseName
+
+releaseName: catalogue
+```
+
+Helm release identifier inside Kubernetes cluster.
+
+---
+
+## valueFiles
+
+valueFiles:
+  - values-dev.yaml
+```
+
+Provides environment-specific configuration.
+
+Common examples:
+
+```text id="v5n8py"
+values-dev.yaml
+values-stage.yaml
+values-prod.yaml
+```
+
+---
+
+# destination Section
+
+Defines where application will be deployed.
+
+---
+
+## server
+
+server: https://kubernetes.default.svc
+```
+
+Represents current Kubernetes cluster.
+
+Used for in-cluster deployments.
+
+---
+
+## namespace
+
+namespace: argocd
+```
+
+Target namespace where Kubernetes resources will be created.
+
+---
+
+# syncPolicy
+
+Controls synchronization behavior.
+
+---
+
+# automated Sync
+
+automated:
+```
+
+Enables automatic synchronization between:
+
+Git Repository
+        ↓
+Kubernetes Cluster
+```
+
+Without manual approval.
+
+---
+
+# prune
+
+prune: true
+```
+
+If resources are deleted from Git:
+
+* Argo CD also deletes them from cluster
+
+Example:
+
+Delete deployment YAML from Git
+        ↓
+Argo CD removes deployment from cluster
+```
+
+This keeps cluster fully aligned with Git.
+
+---
+
+# selfHeal
+selfHeal: true
+```
+
+Automatically restores manually modified resources.
+
+Example:
+
+Engineer manually changes deployment in cluster
+        ↓
+Argo CD detects drift
+        ↓
+Argo CD restores original Git configuration
+```
+
+This prevents configuration drift.
+
+---
+
+# GitOps Workflow
+
+Developer pushes changes to Git
+           ↓
+Argo CD detects Git changes
+           ↓
+Argo CD compares cluster state
+           ↓
+Argo CD syncs manifests
+           ↓
+Kubernetes cluster updated
+```
+
+---
+
+# Real DevOps Use Cases
+
+## Automated Kubernetes Deployments
+
+Used for:
+
+* Microservices deployment
+* Environment promotion
+* Continuous delivery
+
+---
+
+## GitOps
+
+Git becomes:
+
+Single Source of Truth
+```
+
+Benefits:
+
+* Version control
+* Auditability
+* Rollback capability
+* Deployment history
+
+---
+
+## Self-Healing Infrastructure
+
+Automatically fixes:
+
+* Manual changes
+* Configuration drift
+* Accidental modifications
+
+---
+
+## Multi-Environment Deployments
+
+Using different values files:
+
+values-dev.yaml
+values-stage.yaml
+values-prod.yaml
+```
+
+---
+
+# Why Argo CD Is Important
+
+Traditional deployments:
+
+* Require manual kubectl commands
+* Are difficult to audit
+* Can drift from desired state
+
+Argo CD provides:
+
+* Automated deployments
+* GitOps workflows
+* Continuous synchronization
+* Drift detection
+* Self-healing Kubernetes deployments
+
+It is widely used in modern Kubernetes DevOps environments alongside Kubernetes and Helm.
+
+---
+
+# How to Deploy
+
+1. Install Argo CD in Kubernetes cluster
+2. Save manifest as:
+
+application.yaml
+```
+
+3. Apply manifest:
+
+kubectl apply -f application.yaml
+```
+
+4. Open Argo CD UI
+5. Observe application synchronization
+6. Verify resources inside Kubernetes cluster
+
+---
