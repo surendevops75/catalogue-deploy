@@ -397,7 +397,6 @@ Used for:
 
 Git becomes:
 
-```text id="p3m7qx"
 Single Source of Truth
 ```
 
@@ -424,7 +423,6 @@ Automatically fixes:
 
 Using different values files:
 
-```text id="s6q1vn"
 values-dev.yaml
 values-stage.yaml
 values-prod.yaml
@@ -457,13 +455,11 @@ It is widely used in modern Kubernetes DevOps environments alongside Kubernetes 
 1. Install Argo CD in Kubernetes cluster
 2. Save manifest as:
 
-```text id="h9m2qt"
 application.yaml
 ```
 
 3. Apply manifest:
 
-```bash id="y4q7vp"
 kubectl apply -f application.yaml
 ```
 
