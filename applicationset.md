@@ -21,7 +21,6 @@ This approach is heavily used in GitOps-based DevOps environments to:
 
 # ApplicationSet Manifest
 
-```yaml
 # --------------------------------------------------------
 # API VERSION
 # --------------------------------------------------------
